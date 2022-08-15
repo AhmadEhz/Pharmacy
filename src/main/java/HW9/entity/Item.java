@@ -7,16 +7,18 @@ public class Item {
     private String name;
     private int price;
     private boolean doesExist;
+    private int prescriptionId;
     public Item () {}
 
     public Item(String name) {
         this.name = name;
     }
-    public Item(int id, String name, int price, boolean doesExist) {
+    public Item(int id, String name, int price, boolean doesExist, int prescriptionId) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.doesExist = doesExist;
+        this.prescriptionId = prescriptionId;
     }
 
     public int getId() {
@@ -43,7 +45,7 @@ public class Item {
         this.price = price;
     }
 
-    public boolean isDoesExist() {
+    public boolean getDoesExist() {
         return doesExist;
     }
 
@@ -62,5 +64,13 @@ public class Item {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public int getPrescriptionId() {
+        return prescriptionId;
+    }
+
+    public void setPrescriptionId(int prescriptionId) {
+        this.prescriptionId = prescriptionId;
     }
 }

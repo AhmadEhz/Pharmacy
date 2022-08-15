@@ -7,7 +7,14 @@ import java.sql.SQLException;
 
 public class ItemService {
     ItemRepository itemRepository = new ItemRepository();
-    public int add(Item item) throws SQLException {
-        return itemRepository.add(item);
+
+    public void add(Item item, int prescriptionId) throws SQLException {
+        itemRepository.add(item, prescriptionId);
+    }
+    public void remove(int id) throws SQLException {
+        itemRepository.remove(id);
+    }
+    public void edit(Item item) throws SQLException {
+        itemRepository.edit(item);
     }
 }

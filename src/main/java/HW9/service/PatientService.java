@@ -6,11 +6,9 @@ import HW9.entity.PrescriptionList;
 import java.sql.SQLException;
 
 public class PatientService {
-    ItemService itemService = new ItemService();
+    PrescriptionService prescriptionService = new PrescriptionService();
     public void addPrescription(Prescription prescription) throws SQLException {
-        for (int i = 0; prescription.getItem(i) != null; i++) {
-            itemService.add(prescription.getItem(i));
-        }
+        prescriptionService.add(prescription);
     }
     public PrescriptionList seePrescriptions(){
         return null;

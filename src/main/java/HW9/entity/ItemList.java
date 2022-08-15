@@ -4,17 +4,17 @@ import java.util.Arrays;
 
 public class ItemList {
     private Item[] items;
-    private final boolean finalLength;
+    private final boolean finalSize;
     private int index;
 
-    public ItemList(int length, boolean finalLength) {
-        this.finalLength = finalLength;
+    public ItemList(int length, boolean finalSize) {
+        this.finalSize = finalSize;
         items = new Item[length];
     }
 
     public void add(Item item) {
         if (index == items.length - 1) {
-            if (finalLength)
+            if (finalSize)
                 return;
             Arrays.copyOf(items, items.length + 100);
         }
