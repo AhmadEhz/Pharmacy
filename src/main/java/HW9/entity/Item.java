@@ -1,10 +1,13 @@
 package HW9.entity;
 
+import java.util.Objects;
+
 public class Item {
     private int id;
-    private final String name;
+    private String name;
     private int price;
     private boolean doesExist;
+    public Item () {}
 
     public Item(String name) {
         this.name = name;
@@ -16,7 +19,7 @@ public class Item {
         this.doesExist = doesExist;
     }
 
-    public int getId(String name) {
+    public int getId() {
         return id;
     }
 
@@ -46,5 +49,18 @@ public class Item {
 
     public void setDoesExist(boolean doesExist) {
         this.doesExist = doesExist;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return Objects.equals(name, item.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
