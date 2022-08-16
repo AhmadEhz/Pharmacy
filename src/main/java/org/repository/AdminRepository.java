@@ -1,8 +1,8 @@
-package HW9.repository;
+package org.repository;
 
-import HW9.entity.Item;
-import HW9.entity.Prescription;
-import HW9.entity.PrescriptionList;
+import org.entity.Item;
+import org.entity.Prescription;
+import org.entity.PrescriptionList;
 
 public class AdminRepository {
     public PrescriptionList seeAllPrescription() {

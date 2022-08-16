@@ -1,4 +1,4 @@
-package HW9.entity;
+package org.entity;
 
 import java.util.Arrays;
 

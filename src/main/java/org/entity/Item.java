@@ -1,18 +1,21 @@
-package HW9.entity;
+package org.entity;
 
 import java.util.Objects;
 
 public class Item {
-    private int id;
+    private long id;
     private String name;
     private int price;
     private boolean doesExist;
     private int prescriptionId;
-    public Item () {}
+
+    public Item() {
+    }
 
     public Item(String name) {
         this.name = name;
     }
+
     public Item(int id, String name, int price, boolean doesExist, int prescriptionId) {
         this.id = id;
         this.name = name;
@@ -21,11 +24,11 @@ public class Item {
         this.prescriptionId = prescriptionId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -33,9 +36,9 @@ public class Item {
         return name;
     }
 
-    /*public void setName(String name) {
+    public void setName(String name) {
         this.name = name;
-    }*/
+    }
 
     public int getPrice() {
         return price;
@@ -53,6 +56,14 @@ public class Item {
         this.doesExist = doesExist;
     }
 
+    public int getPrescriptionId() {
+        return prescriptionId;
+    }
+
+    public void setPrescriptionId(int prescriptionId) {
+        this.prescriptionId = prescriptionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,13 +75,5 @@ public class Item {
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }
-
-    public int getPrescriptionId() {
-        return prescriptionId;
-    }
-
-    public void setPrescriptionId(int prescriptionId) {
-        this.prescriptionId = prescriptionId;
     }
 }

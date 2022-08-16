@@ -1,8 +1,8 @@
-package HW9.service;
+package org.service;
 
-import HW9.entity.Prescription;
-import HW9.entity.PrescriptionStatus;
-import HW9.repository.PrescriptionRepository;
+import org.entity.Prescription;
+import org.entity.PrescriptionStatus;
+import org.repository.PrescriptionRepository;
 
 import java.sql.SQLException;
 

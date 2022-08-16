@@ -1,4 +1,4 @@
-package HW9.config;
+package org.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

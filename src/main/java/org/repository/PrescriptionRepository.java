@@ -1,8 +1,8 @@
-package HW9.repository;
+package org.repository;
 
-import HW9.config.DbConfig;
-import HW9.entity.Prescription;
-import HW9.entity.PrescriptionStatus;
+import org.config.DbConfig;
+import org.entity.Prescription;
+import org.entity.PrescriptionStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package HW9.service;
+package org.service;
 
 public class AdminService {
 }
