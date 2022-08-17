@@ -1,10 +1,31 @@
 package org.entity;
 
-public class Employee {
+import org.service.PersonService;
+
+public abstract class Person {
+    private long id;
     private String name;
     private String username;
     private String password;
-    private AccessModifier access;
+
+    public Person() {
+    }
+
+    public Person(String username, String password) {
+        PersonService personService = new PersonService();
+        this.id = personService.setId();
+        this.name = personService.setName();
+        this.username = username;
+        this.password = password;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -30,11 +51,4 @@ public class Employee {
         this.password = password;
     }
 
-    public AccessModifier getAccess() {
-        return access;
-    }
-
-    public void setAccess(AccessModifier access) {
-        this.access = access;
-    }
 }

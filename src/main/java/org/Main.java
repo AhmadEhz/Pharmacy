@@ -1,5 +1,4 @@
 package org;
-
 import org.util.Menu;
 
 public class Main {

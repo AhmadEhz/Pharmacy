@@ -2,21 +2,21 @@ package org.entity;
 
 import java.util.Objects;
 
-public class Item {
+public class Drug {
     private long id;
     private String name;
     private int price;
     private boolean doesExist;
-    private int prescriptionId;
+    private long prescriptionId;
 
-    public Item() {
+    public Drug() {
     }
 
-    public Item(String name) {
+    public Drug(String name) {
         this.name = name;
     }
 
-    public Item(int id, String name, int price, boolean doesExist, int prescriptionId) {
+    public Drug(int id, String name, int price, boolean doesExist, int prescriptionId) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -56,20 +56,32 @@ public class Item {
         this.doesExist = doesExist;
     }
 
-    public int getPrescriptionId() {
+    public long getPrescriptionId() {
         return prescriptionId;
     }
 
-    public void setPrescriptionId(int prescriptionId) {
+    public void setPrescriptionId(long prescriptionId) {
         this.prescriptionId = prescriptionId;
+    }
+    @Override
+    public String toString() {
+        return "Name: " + name + " | " +
+                "Price: " + price +
+                " -> " + doesExistToString();
+
+    }
+    private String doesExistToString() {
+        if(doesExist)
+            return "Available";
+            else return "Not available";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Item item = (Item) o;
-        return Objects.equals(name, item.name);
+        Drug drug = (Drug) o;
+        return Objects.equals(name, drug.name);
     }
 
     @Override

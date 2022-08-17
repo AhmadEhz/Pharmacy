@@ -4,16 +4,20 @@ import java.util.Objects;
 
 public class Prescription {
     private int id;
-    private ItemList items;
+    private DrugList drugs;
     private PrescriptionStatus status;
+    private long patientId;
+    private int totalPrice;
+
     public Prescription() {
         status = PrescriptionStatus.PENDING;
-        items = new ItemList(10,true);
+        drugs = new DrugList(10, true);
     }
+
     public Prescription(int id) {
         status = PrescriptionStatus.PENDING;
         this.id = id;
-        items = new ItemList(10,true);
+        drugs = new DrugList(10, true);
     }
 
     public int getId() {
@@ -24,15 +28,16 @@ public class Prescription {
         this.id = id;
     }
 
-    public ItemList getItems() {
-        return items;
-    }
-    public Item getItem(int id) {
-        return items.load(id);
+    public DrugList getDrugs() {
+        return drugs;
     }
 
-    public void setItems(ItemList items) {
-        this.items = items;
+    public Drug getItem(int id) {
+        return drugs.load(id);
+    }
+
+    public void setDrugs(DrugList drugs) {
+        this.drugs = drugs;
     }
 
     public PrescriptionStatus getStatus() {
@@ -42,11 +47,35 @@ public class Prescription {
     public void setStatus(PrescriptionStatus status) {
         this.status = status;
     }
-    public boolean isEmptyItem(int id){
-        return items.load(id) == null;
+
+    public boolean isEmptyItem(int id) {
+        return drugs.load(id) == null;
     }
+
     public int numberOfItems() {
-        return items.length();
+        return drugs.length();
+    }
+
+    public long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(long patientId) {
+        this.patientId = patientId;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Items:\n" + drugs +
+                "Status: " + status + "\n";
     }
 
     @Override
