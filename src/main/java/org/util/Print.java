@@ -13,7 +13,7 @@ public class Print {
         System.out.println("Enter your username (0 for exit) :");
     }
     public static void enterPassword() {
-        System.out.println("Enter your password:");
+        System.out.println("Enter your password (0 for exit) :");
     }
 
     public static void invalidEntry() {
@@ -44,5 +44,9 @@ public class Print {
 
     public static void invalidPassword() {
         System.out.println("Invalid password!");
+    }
+
+    public static void usernameExist() {
+        System.out.println("Username is exist!");
     }
 }

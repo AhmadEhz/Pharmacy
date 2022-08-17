@@ -1,10 +1,14 @@
 package org.util;
 
+import org.entity.Admin;
 import org.entity.Patient;
+import org.service.AdminService;
 import org.service.PatientService;
 
 public class Menu {
     static boolean exit = false;
+    static PatientService patientService = new PatientService();
+    static AdminService adminService = new AdminService();
 
     public static void mainMenu() {
         Print.welcome();
@@ -16,6 +20,7 @@ public class Menu {
                     adminLogin();
                 }
                 case "2" -> patientLogin();
+                case "3" -> patientSignUp();
                 case "0" -> {
                     return;
                 }
@@ -24,28 +29,58 @@ public class Menu {
         }
     }
 
+    private static void patientSignUp() {
+        while (true) {
+            Patient patient = new Patient();
+            Print.enterUsername();
+            String input = Input.scanner();
+            patient.setUsername(input);
+            if (patientService.checkUsername(patient)) ;
+
+        }
+    }
+
+    public static String enterUsername(boolean checkUserName) {
+        while (true) {
+            Print.enterUsername();
+            String input = Input.scanner();
+            Print.enterUsername();
+            Patient patient = new Patient();
+            patient.setUsername(input);
+            if (checkUserName && patientService.checkUsername(patient)) {
+                Print.usernameExist();
+            } else return input;
+        }
+
+    }
+
     private static void adminLogin() {
-        while(true)
-        Print.enterUsername();
+        while (true) {
+            Admin admin = new Admin();
+            admin.setUsername(enterUsername(false));
+            admin = enterPassword(admin);
+            if(admin==null)
+                continue;
+            adminMenu(admin);
+            return;
+        }
+
+
+    }
+
+    private static void adminMenu(Admin admin) {
+
     }
 
     public static void patientLogin() {
         while (true) {
-            Print.enterUsername();
-            String username = Input.scanner();
-            String password;
-            if (username.equals("0"))
-                return;
-            Patient patient = null;
-            if (checkUsername()) {
-                password = enterPassword(username);
-                if (checkUser(password)) {
-                    patient = new Patient(username, password);
-                    patientMenu(patient);
-                    return;
-                }
-                else Print.invalidPassword();
-            }
+            Patient patient = new Patient();
+            patient.setUsername(enterUsername(false));
+            patient = enterPassword(patient);
+            if(patient==null)
+                continue;
+            patientMenu(patient);
+            return;
         }
     }
 
@@ -81,8 +116,29 @@ public class Menu {
     }
 
 
-    private static String enterPassword(String username) {
-        Print.enterPassword();
-        return Input.scanner();
+    private static Patient enterPassword(Patient patient) {
+        while (true) {
+            Print.enterPassword();
+            String input = Input.scanner();
+            if (input.equals("0"))
+                return null;
+            patient.setPassword(input);
+            if (patientService.isExist(patient))
+                return patient;
+            else Print.invalidPassword();
+        }
+    }
+
+    private static Admin enterPassword(Admin admin) {
+        while (true) {
+            Print.enterPassword();
+            String input = Input.scanner();
+            if (input.equals("0"))
+                return null;
+            admin.setPassword(input);
+            if(adminService.isExist(admin))
+                return admin;
+            else Print.invalidPassword();
+        }
     }
 }
