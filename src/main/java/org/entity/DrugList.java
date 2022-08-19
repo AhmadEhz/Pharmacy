@@ -71,4 +71,7 @@ public class DrugList {
         }
         return string;
     }
+    public boolean isFull() {
+        return index==drugs.length-1;
+    }
 }

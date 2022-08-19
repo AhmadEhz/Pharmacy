@@ -1,26 +1,25 @@
 package org.service;
 
-import org.entity.Admin;
-import org.entity.Drug;
-import org.entity.Prescription;
-import org.entity.PrescriptionList;
+import org.entity.*;
 import org.repository.AdminRepository;
 
 import java.sql.SQLException;
 
 public class AdminService {
-    AdminRepository adminRepository = new AdminRepository();
+    private AdminRepository adminRepository = new AdminRepository();
+    private PrescriptionService prescriptionService = new PrescriptionService();
+    DrugService drugService = new DrugService();
     public PrescriptionList seeAllPrescription() {
-        return null;
+            return prescriptionService.loadAll();
     }
-    public void confirmPrescription(Prescription prescription) {
-
+    public void setPrescriptionStatus(Prescription prescription, PrescriptionStatus status) {
+        prescriptionService.setPrescriptionStatus(prescription, status);
     }
-    public void setExist(Prescription prescription) {
-
+    public void setDrugExist(Drug drug, boolean existDrug) {
+        drugService.setDoesExist(drug,existDrug);
     }
-    public void setItemPrice(Drug drug) {
-
+    public void setDrugPrice(Drug drug, int price) {
+            drugService.setPrice(drug,price);
     }
 
     public Admin load(Admin admin) {

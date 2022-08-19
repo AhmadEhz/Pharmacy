@@ -3,7 +3,7 @@ package org.entity;
 import java.util.Objects;
 
 public class Prescription {
-    private int id;
+    private long id;
     private DrugList drugs;
     private PrescriptionStatus status;
     private long patientId;
@@ -11,20 +11,20 @@ public class Prescription {
 
     public Prescription() {
         status = PrescriptionStatus.PENDING;
-        drugs = new DrugList(10, true);
+        drugs = new DrugList(10, true);//max drugList by per prescription is 10.
     }
 
-    public Prescription(int id) {
+    public Prescription(long patientId) {
+        this.patientId = patientId;
+        drugs = new DrugList(10, true);//max drugList by per prescription is 10.
         status = PrescriptionStatus.PENDING;
-        this.id = id;
-        drugs = new DrugList(10, true);
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -52,10 +52,6 @@ public class Prescription {
         return drugs.load(id) == null;
     }
 
-    public int numberOfItems() {
-        return drugs.length();
-    }
-
     public long getPatientId() {
         return patientId;
     }
@@ -71,11 +67,15 @@ public class Prescription {
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
+    public int numberOfItems() {
+        return drugs.length();
+    }
 
     @Override
     public String toString() {
         return "Items:\n" + drugs +
-                "Status: " + status + "\n";
+                "Status: " + status + "\n"
+                +"-----------------------------\n";
     }
 
     @Override

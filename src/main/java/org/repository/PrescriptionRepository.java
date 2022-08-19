@@ -12,46 +12,52 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class PrescriptionRepository {
-    private int lastPrescriptionIdAdded;
+    private long lastPrescriptionIdAdded;
     private DrugRepositoryImpl drugRepository = new DrugRepositoryImpl();
 
     public void create(Prescription prescription) throws SQLException {
         String query = """
-                insert into prescription(status)
-                values(?);
+                insert into prescription(status, patient_id)
+                values(? :: prescription_status, ?);
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, prescription.getStatus().name());
-        ResultSet rs = ps.executeQuery();
-        lastPrescriptionIdAdded = rs.getInt("id");
+        ps.setLong(2, prescription.getPatientId());
+        ps.execute();
+        ResultSet generatedKeys = ps.getGeneratedKeys();
+        generatedKeys.next();
+        lastPrescriptionIdAdded = generatedKeys.getInt(1);
+
+        generatedKeys.close();
         ps.close();
     }
 
-    public void update(Prescription prescription, PrescriptionStatus status) throws SQLException {
+    public void update(Prescription prescription) throws SQLException {
         String query = """
                 update prescription
-                set status = ?
+                set status = ?, total_price = ?
                 where id = ?;
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
-        ps.setString(1, status.name());
-        ps.setInt(2, prescription.getId());
+        ps.setString(1, prescription.getStatus().name());
+        ps.setInt(2, prescription.getTotalPrice());
+        ps.setLong(3, prescription.getId());
         ps.execute();
         ps.close();
     }
 
-    public void delete(int id) throws SQLException {
+    public void delete(long id) throws SQLException {
         String query = """
                 delete from prescription
                 where id = ?
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
-        ps.setInt(1, id);
+        ps.setLong(1, id);
         ps.execute();
         ps.close();
     }
 
-    public int getLastPrescriptionIdAdded() {
+    public long getLastPrescriptionIdAdded() {
         return lastPrescriptionIdAdded;
     }
 
@@ -65,14 +71,14 @@ public class PrescriptionRepository {
         PrescriptionList prescriptionList = new PrescriptionList();
         while (rs.next()) {
             Prescription prescription = new Prescription();
-            prescription.setId(rs.getInt("id"));
+            prescription.setId(rs.getLong("id"));
             prescription.setStatus(PrescriptionStatus.valueOf(rs.getString("status")));
             prescriptionList.add(prescription);
         }
         return prescriptionList;
     }
 
-    public PrescriptionList read(long patient_id) throws SQLException {
+    public PrescriptionList readAll(long patient_id) throws SQLException {
         String query = """
                 select * from prescription
                 where patient_id = ?
@@ -85,7 +91,7 @@ public class PrescriptionRepository {
         PrescriptionList prescriptionList = new PrescriptionList();
         while (rs.next()) {
             Prescription prescription = new Prescription();
-            prescription.setId(rs.getInt("id"));
+            prescription.setId(rs.getLong("id"));
             prescription.setStatus(PrescriptionStatus.valueOf(rs.getString("status")));
             prescription.setDrugs(drugRepository.read(prescription.getId()));
             prescriptionList.add(prescription);
@@ -106,7 +112,21 @@ public class PrescriptionRepository {
             prescription.setDrugs(drugRepository.read(prescription.getId()));
             prescription.setStatus(PrescriptionStatus.valueOf(rs.getString("status")));
             return prescription;
-        }
-        else return null;
+        } else return null;
     }
+    /*public PrescriptionList read() throws SQLException {
+        String query = """
+                """;
+        PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+        PrescriptionList prescriptionList = new PrescriptionList();
+        while (rs.next()) {
+            Prescription prescription = new Prescription();
+            prescription.setId(rs.getInt("id"));
+            prescription.setStatus(PrescriptionStatus.valueOf(rs.getString("status")));
+            prescription.setDrugs(drugRepository.read(prescription.getId()));
+            prescriptionList.add(prescription);
+        }
+        return prescriptionList;
+    }*/
 }

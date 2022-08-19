@@ -38,6 +38,7 @@ public class Print {
         System.out.println("""
                 1- Login admin
                 2- Login patient
+                3- Signup patient
                 0- Exit""");
         enterNumber();
     }
@@ -48,5 +49,32 @@ public class Print {
 
     public static void usernameExist() {
         System.out.println("Username is exist!");
+    }
+
+    public static void adminMenu() {
+        System.out.println("""
+                1- Show all prescriptions
+                2- 
+                """);
+    }
+
+    public static void created() {
+        System.out.println("Created!");
+    }
+
+    public static void addDrug() {
+        System.out.println("Add your drug name (0 to save and exit) :");
+    }
+
+    public static void added() {
+        System.out.println("Added!");
+    }
+
+    public static void enterName() {
+        System.out.println("Enter your name");
+    }
+
+    public static void welcomeUser(String name) {
+        System.out.println("Welcome "+ name+"!");
     }
 }

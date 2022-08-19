@@ -8,26 +8,61 @@ import org.repository.PrescriptionRepository;
 import java.sql.SQLException;
 
 public class PrescriptionService {
-    PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
-    DrugService drugService = new DrugService();
+    private PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
+    private DrugService drugService = new DrugService();
 
-    public void add(Prescription prescription) throws SQLException {
-        prescriptionRepository.create(prescription);
-        int prescriptionId = prescriptionRepository.getLastPrescriptionIdAdded();
+    public void add(Prescription prescription) {
+        try {
+            prescriptionRepository.create(prescription);
+            long prescriptionId = prescriptionRepository.getLastPrescriptionIdAdded();
 
-        for (int i = 0; i < prescription.numberOfItems(); i++) {//Add items of prescription
-            drugService.add(prescription.getItem(i), prescriptionId);
+            for (int i = 0; i < prescription.numberOfItems(); i++) {//Add items of prescription
+                drugService.add(prescription.getItem(i), prescriptionId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-    }
-   public PrescriptionList loadPrescriptionConfirmed(long patientId) throws SQLException {
-        return prescriptionRepository.read(patientId);
-   }
 
-    public void remove(int id) throws SQLException {
+    }
+
+    public void remove(long id) throws SQLException {
         prescriptionRepository.delete(id);
     }
 
-    public void changeStatus(Prescription prescription, PrescriptionStatus status) throws SQLException {
-        prescriptionRepository.update(prescription, status);
+    public PrescriptionList loadAll() {
+        try {
+            return prescriptionRepository.readAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public PrescriptionList loadAll(long patientId) throws SQLException {//Load only confirmed prescriptions.
+        return prescriptionRepository.readAll(patientId);
+    }
+
+    public Prescription load(Prescription prescription) {
+        try {
+            return prescriptionRepository.read(prescription);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setPrescriptionStatus(Prescription prescription, PrescriptionStatus status) {
+        prescription.setStatus(status);
+        try {
+            prescriptionRepository.update(prescription);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isExist(Prescription prescription) {
+        try {
+            return prescriptionRepository.read(prescription) != null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

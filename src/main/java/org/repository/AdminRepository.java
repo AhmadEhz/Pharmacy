@@ -2,6 +2,7 @@ package org.repository;
 
 import org.config.DbConfig;
 import org.entity.Admin;
+import org.entity.PrescriptionStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,11 +16,31 @@ public class AdminRepository {
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
         ResultSet rs = ps.executeQuery();
+        ps.close();
         if(rs.next()) {
             admin.setName(rs.getString("name"));
             admin.setId(rs.getLong("id"));
+            rs.close();
             return admin;
         }
-        else return null;
+        else {
+            rs.close();
+            return null;
+        }
+    }
+    public void update(Admin admin) throws SQLException {
+        String query = """
+                update users
+                set name = ?,
+                username = ?,
+                password = ?
+                where id = ? and access = 'ADMIN';""";
+        PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
+        ps.setString(1,admin.getName());
+        ps.setString(2,admin.getUsername());
+        ps.setString(3,admin.getPassword());
+        ps.setLong(4,admin.getId());
+        ps.execute();
+        ps.close();
     }
 }
