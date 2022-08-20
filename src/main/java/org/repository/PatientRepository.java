@@ -2,19 +2,19 @@ package org.repository;
 
 import org.config.DbConfig;
 import org.entity.Patient;
-import org.repository.drug.DrugRepositoryImpl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class PatientRepository {
-    DrugRepositoryImpl drugRepository = new DrugRepositoryImpl();
+    private long lastGeneratedID;
 
     public Patient read(Patient patient, boolean checkPassword) throws SQLException {
         String query = """
                 select * from users
-                where username = ?
+                where username = ? and access = 'PATIENT'
                 """;
         if (checkPassword)
             query += " and password = ?;";
@@ -39,33 +39,25 @@ public class PatientRepository {
             return null;
         }
     }
-    public void update(Patient patient) throws SQLException {
-        String query= """
-                update users
-                set name = ?,
-                username = ?,
-                password = ?
-                where id = ? and access = 'PATIENT';
-                """;
-        PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
-        ps.setString(1,patient.getName());
-        ps.setString(2, patient.getUsername());
-        ps.setString(3,patient.getPassword());
-        ps.setLong(4,patient.getId());
-        ps.execute();
-        ps.close();
 
-    }
     public void create(Patient patient) throws SQLException {
         String query = """
                 insert into users (name, username, password, access)
                 values (?,?,?,'PATIENT')
                 """;
-        PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
+        PreparedStatement ps = DbConfig.getConfig().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1,patient.getName());
         ps.setString(2,patient.getUsername());
         ps.setString(3,patient.getPassword());
         ps.execute();
+        ResultSet generatedKeys = ps.getGeneratedKeys();
+        generatedKeys.next();
+        lastGeneratedID = generatedKeys.getLong(1);
         ps.close();
+        generatedKeys.close();
+    }
+
+    public long getLastGeneratedId() {
+        return lastGeneratedID;
     }
 }

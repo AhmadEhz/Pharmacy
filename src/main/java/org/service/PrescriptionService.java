@@ -8,16 +8,16 @@ import org.repository.PrescriptionRepository;
 import java.sql.SQLException;
 
 public class PrescriptionService {
-    private PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
-    private DrugService drugService = new DrugService();
+    private final PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
+    private final DrugService drugService = new DrugService();
 
     public void add(Prescription prescription) {
         try {
             prescriptionRepository.create(prescription);
             long prescriptionId = prescriptionRepository.getLastPrescriptionIdAdded();
 
-            for (int i = 0; i < prescription.numberOfItems(); i++) {//Add items of prescription
-                drugService.add(prescription.getItem(i), prescriptionId);
+            for (int i = 0; i < prescription.getNumberOfDrugs(); i++) {//Add items of prescription
+                drugService.add(prescription.getDrug(i), prescriptionId);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -42,9 +42,17 @@ public class PrescriptionService {
         }
     }
 
-    public PrescriptionList loadAll(long patientId,PrescriptionStatus status) {//Load only confirmed prescriptions.
+    public PrescriptionList loadAll(long patientId, PrescriptionStatus status) {//Load only confirmed prescriptions.
         try {
-            return prescriptionRepository.readAll(patientId,status);
+            return prescriptionRepository.readAll(patientId, status);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public PrescriptionList loadAll(PrescriptionStatus status) {
+        try {
+            return prescriptionRepository.readAll(status);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,10 +66,12 @@ public class PrescriptionService {
         }
     }
 
-    public void setPrescriptionStatus(Prescription prescription, PrescriptionStatus status) {
-        prescription.setStatus(status);
+    public void update(Prescription prescription) {
         try {
             prescriptionRepository.update(prescription);
+            for (int i = 0; i < prescription.getNumberOfDrugs(); i++) {
+                drugService.update(prescription.getDrug(i));
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

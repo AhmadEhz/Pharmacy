@@ -9,13 +9,6 @@ public class Input {
         return scanner.nextLine();
     }
 
-    public static long longScanner() {
-        String input = scanner.nextLine();
-        if (isDigit(input))
-            return Long.parseLong(input);
-        else return -1;
-    }
-
     private static boolean isDigit(String input) {
         if (input.equals("")||input.charAt(0) == '-')
             return false;

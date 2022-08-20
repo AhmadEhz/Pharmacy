@@ -2,16 +2,18 @@ package org.util;
 
 import org.entity.Prescription;
 
+import javax.naming.spi.ObjectFactory;
+
 public class Print {
-    public static void welcome() {
-        System.out.println("Welcome!");
-    }
+
     public static void enterNumber() {
         System.out.println("Enter a number:");
     }
+
     public static void enterUsername() {
         System.out.println("Enter your username (0 for exit) :");
     }
+
     public static void enterPassword() {
         System.out.println("Enter your password (0 for exit) :");
     }
@@ -40,23 +42,47 @@ public class Print {
         enterNumber();
     }
 
-    public static void invalidPassword() {
-        System.out.println("Invalid password!");
-    }
-
-    public static void usernameExist() {
-        System.out.println("Username is exist!");
-    }
-
     public static void adminMenu() {
         System.out.println("""
                 1- Show all prescriptions
-                2- 
+                2- Show all pending prescriptions
+                3- Show all rejected prescriptions
+                4- Show all confirmed prescriptions
+                0- Exit
                 """);
+        enterNumber();
     }
 
-    public static void prescription(Prescription prescription) {
-        System.out.println(prescription);
+    public static void editLoadedPrescription() {
+        System.out.println("""
+                1- Edit all drugs
+                2- Edit one drug
+                3- Set prescription status
+                0- Submit prescription and exit
+                X- Exit and abort""");
+        enterNumber();
     }
 
+    public static void editDrug(boolean doesExist) {
+        System.out.println("""
+                1- Set price
+                2- Change to\040""" + doesExistToString(doesExist) +"\n"+ """
+                0- Submit drug and exit
+                X- Exit and abort""");
+        enterNumber();
+    }
+
+    private static String doesExistToString(boolean doesExist) {
+        if (doesExist)
+            return "Not available";
+        else return "Available";
+    }
+
+    public static void setPrescriptionStatus() {
+        System.out.println("""
+                1- Confirm
+                2- Reject
+                3- Pending
+                0- Exit.""");
+    }
 }

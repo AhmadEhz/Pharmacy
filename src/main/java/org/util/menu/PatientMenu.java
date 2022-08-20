@@ -16,6 +16,8 @@ public class PatientMenu {
     static void signUp() {
         print("Enter your name (0 for exit) :");
         String name = Input.scanner();
+        if(name.equals("0"))
+            return;
         while (true) {
             Patient patient = new Patient();
             patient.setName(name);
@@ -24,10 +26,11 @@ public class PatientMenu {
             patient.setUsername(input);
             if (!patientService.checkUsername(patient)) {
                 patient = enterPassword(patient, false);
-                if (patient == null)
+                if (patient == null)//If patient is null, it means user entered 0 to exit.
                     continue;
                 patientService.add(patient);
                 print("Created!");
+                patient.setId(patientService.getLastGeneratedId());
                 menu(patient);
                 return;
             } else {
@@ -39,7 +42,7 @@ public class PatientMenu {
 
     static void login() {
         while (true) {
-            print("Enter username:");
+            print("Enter username (0 to exit) :");
             Patient patient = new Patient();
             String username = Input.scanner();
             if (username.equals("0"))
@@ -50,7 +53,7 @@ public class PatientMenu {
                 continue;
             }
             patient = enterPassword(patient, true);
-            if (patient == null)
+            if (patient == null)//If patient is null, it means user entered 0 to exit.
                 continue;
             menu(patient);
             return;
@@ -109,21 +112,21 @@ public class PatientMenu {
     private static void editPrescriptionMenu(Patient patient) {
         PrescriptionList prescriptionList = prescriptionService.loadAll(patient.getId(), PrescriptionStatus.PENDING);
         if (prescriptionList.isEmpty()) {
-            print("There is no prescription!");
+            print("There is no prescription to show!");
             return;
         }
         print(prescriptionList);
         while (true) {
             print("Enter your prescription id (0 for exit) :");
-            int indexOfPrescriptionList = Input.intScanner();
+            int indexOfPrescriptionList = Input.intScanner();//If user entered invalid input, this method returns -1.
             switch (indexOfPrescriptionList) {
                 case -1 -> print("Invalid entry!");
                 case 0 -> {
                     return;
                 }
                 default -> {
-                    long prescriptionID = Utility.getPrescriptionId(prescriptionService.loadAll(patient.getId(), PrescriptionStatus.PENDING), indexOfPrescriptionList);
-                    Prescription prescription = new Prescription(prescriptionID, patient.getId());
+                    long prescriptionId = Utility.getPrescriptionId(prescriptionService.loadAll(patient.getId(), PrescriptionStatus.PENDING), indexOfPrescriptionList);
+                    Prescription prescription = new Prescription(prescriptionId, patient.getId());
                     prescription.setStatus(PrescriptionStatus.PENDING);
                     if (prescriptionService.isExist(prescription, true)) {
                         editLoadedPrescriptionMenu(prescriptionService.load(prescription, true));
@@ -135,12 +138,12 @@ public class PatientMenu {
     }
 
     private static void editLoadedPrescriptionMenu(Prescription loadedPrescription) {
-        Print.prescription(loadedPrescription);
+        print(loadedPrescription);
         while (true) {
             print("Enter drug id to edit (0 to save and exit) :");
             int indexOfDrugList = Input.intScanner();
             switch (indexOfDrugList) {
-                case -1 -> Print.invalidEntry();
+                case -1 -> print("Invalid entry!");
                 case 0 -> {
                     return;
                 }
@@ -164,6 +167,7 @@ public class PatientMenu {
         if (input.equalsIgnoreCase("x")) {
             drugService.remove(drug);
             print("Deleted!");
+            return;
         }
 
         drug.setName(input);
@@ -180,10 +184,13 @@ public class PatientMenu {
                 break;
             drugList.add(drug);
         }
-
-        prescription.setDrugs(drugList);
-        prescriptionService.add(prescription);
-        print("Added!");
+        if (drugList.isEmpty())
+            print("Not added any drug!\nAborted!");
+        else {
+            prescription.setDrugs(drugList);
+            prescriptionService.add(prescription);
+            print("Added!");
+        }
     }
 
     private static Drug addDrugMenu() {

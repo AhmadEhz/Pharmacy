@@ -1,7 +1,6 @@
 package org.service;
 
 import org.entity.Patient;
-import org.entity.Prescription;
 import org.entity.PrescriptionList;
 import org.entity.PrescriptionStatus;
 import org.repository.PatientRepository;
@@ -11,10 +10,6 @@ import java.sql.SQLException;
 public class PatientService {
     PrescriptionService prescriptionService = new PrescriptionService();
     PatientRepository patientRepository = new PatientRepository();
-
-    public void addPrescription(Prescription prescription) throws SQLException {
-        prescriptionService.add(prescription);
-    }
 
     public void add(Patient patient) {
         try {
@@ -26,14 +21,6 @@ public class PatientService {
 
     public PrescriptionList loadPrescriptions(long patientId, PrescriptionStatus status) {
         return prescriptionService.loadAll(patientId, status);
-
-    }
-
-    public void editPrescription(Prescription prescription) {
-
-    }
-
-    public void deletePrescription(Prescription prescription) {
 
     }
 
@@ -51,5 +38,9 @@ public class PatientService {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public long getLastGeneratedId() {
+        return patientRepository.getLastGeneratedId();
     }
 }

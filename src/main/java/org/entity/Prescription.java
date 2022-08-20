@@ -20,8 +20,8 @@ public class Prescription {
         this.status = status;
     }
 
-    public Prescription(long patientId) {
-        this.patientId = patientId;
+    public Prescription(long id) {
+        this.id = id;
         drugs = new DrugList(10, true);
     }
 
@@ -43,7 +43,7 @@ public class Prescription {
         return drugs;
     }
 
-    public Drug getItem(int id) {
+    public Drug getDrug(int id) {
         return drugs.load(id);
     }
 
@@ -59,16 +59,8 @@ public class Prescription {
         this.status = status;
     }
 
-    public boolean isEmptyItem(int id) {
-        return drugs.load(id) == null;
-    }
-
     public long getPatientId() {
         return patientId;
-    }
-
-    public void setPatientId(long patientId) {
-        this.patientId = patientId;
     }
 
     public int getTotalPrice() {
@@ -79,14 +71,17 @@ public class Prescription {
         this.totalPrice = totalPrice;
     }
 
-    public int numberOfItems() {
+    public int getNumberOfDrugs() {
         return drugs.length();
+    }
+    public boolean isEmpty() {
+        return drugs == null;
     }
 
     @Override
     public String toString() {//if status is confirmed, shows all drugs with details. if not confirmed, shows name of drugs only.
         String drugs = null;
-        if (this.drugs != null)//If this.drugs is null it means this prescription has not any items.
+        if (!isEmpty())
             drugs = status == PrescriptionStatus.CONFIRMED ? this.drugs + "Total price: " + totalPrice + "\n" : this.drugs.toStringSummary();
         String drugList = drugs != null ? "Items:\n" + drugs : "No item!\n";
         return drugList + "Status: " + status + "\n" +

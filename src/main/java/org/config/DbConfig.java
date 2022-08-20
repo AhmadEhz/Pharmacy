@@ -12,7 +12,7 @@ public class DbConfig {
 
     static {
         try {
-            CONFIG = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Pharmacy", "postgres", "457894561");
+            CONFIG = DriverManager.getConnection("jdbc:postgresql://localhost:5432/pharmacy", "postgres", "457894561");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

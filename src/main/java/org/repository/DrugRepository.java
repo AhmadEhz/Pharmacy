@@ -1,4 +1,4 @@
-package org.repository.drug;
+package org.repository;
 
 import org.config.DbConfig;
 import org.entity.Drug;
@@ -9,8 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class DrugRepositoryImpl implements DrugRepository {
-    @Override
+public class DrugRepository {
     public void add(Drug drug, long prescriptionId) throws SQLException {
         String query = """
                 insert into drug (name,prescription_id)
@@ -23,7 +22,6 @@ public class DrugRepositoryImpl implements DrugRepository {
         ps.close();
     }
 
-    @Override
     public void delete(Drug drug) throws SQLException {
         String query = """
                 delete from drug
@@ -34,8 +32,6 @@ public class DrugRepositoryImpl implements DrugRepository {
         ps.execute();
         ps.close();
     }
-
-    @Override
     public void update(Drug drug) throws SQLException {
         String query = """
                 update drug

@@ -6,32 +6,19 @@ import org.repository.AdminRepository;
 import java.sql.SQLException;
 
 public class AdminService {
-    private AdminRepository adminRepository = new AdminRepository();
-    private PrescriptionService prescriptionService = new PrescriptionService();
-    DrugService drugService = new DrugService();
-    public PrescriptionList seeAllPrescription() {
-            return prescriptionService.loadAll();
-    }
-    public void setPrescriptionStatus(Prescription prescription, PrescriptionStatus status) {
-        prescriptionService.setPrescriptionStatus(prescription, status);
-    }
-    public void setDrugExist(Drug drug, boolean existDrug) {
-        drugService.setDoesExist(drug,existDrug);
-    }
-    public void setDrugPrice(Drug drug, int price) {
-            drugService.setPrice(drug,price);
-    }
+    private final AdminRepository adminRepository = new AdminRepository();
 
-    public Admin load(Admin admin) {
+    public boolean isExist(Admin admin) {
         try {
-            return adminRepository.read(admin);
+            return adminRepository.read(admin,true)!=null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    public boolean isExist(Admin admin) {
+
+    public boolean checkUsername(Admin admin) {
         try {
-            return adminRepository.read(admin)!=null;
+            return adminRepository.read(admin, false) != null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

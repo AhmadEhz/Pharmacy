@@ -11,20 +11,8 @@ public class Drug {
 
     public Drug() {
     }
-
-    public Drug(long id) {
-        this.id = id;
-    }
     public Drug (long id, long prescriptionId) {
         this.id = id;
-        this.prescriptionId = prescriptionId;
-    }
-
-    public Drug(int id, String name, int price, boolean doesExist, int prescriptionId) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.doesExist = doesExist;
         this.prescriptionId = prescriptionId;
     }
 

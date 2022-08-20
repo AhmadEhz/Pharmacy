@@ -2,12 +2,12 @@ package org.service;
 
 import org.entity.Drug;
 import org.entity.DrugList;
-import org.repository.drug.DrugRepositoryImpl;
+import org.repository.DrugRepository;
 
 import java.sql.SQLException;
 
 public class DrugService {
-    private final DrugRepositoryImpl drugRepository = new DrugRepositoryImpl();
+    private final DrugRepository drugRepository = new DrugRepository();
 
     public void add(Drug drug, long prescriptionId) throws SQLException {
         drugRepository.add(drug, prescriptionId);
@@ -27,6 +27,8 @@ public class DrugService {
         }
     }
     public void remove(DrugList drugList) {
+        if(drugList==null)
+            return;
         for (int i = 0; i<drugList.length(); i++) {
             remove(drugList.load(i));
         }
@@ -43,20 +45,18 @@ public class DrugService {
             throw new RuntimeException(e);
         }
     }
-
-    public void setPrice(Drug drug, int price) {
-        drug.setPrice(price);
-        edit(drug);
-
-    }
-
-    public void setDoesExist(Drug drug, boolean exist) {
-        drug.setDoesExist(exist);
-        edit(drug);
-    }
     public boolean isExist(Drug drug) {
         try {
             return drugRepository.read(drug)!=null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public void update(Drug drug) {
+        try {
+            drugRepository.update(drug);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

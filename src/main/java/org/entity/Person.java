@@ -1,7 +1,5 @@
 package org.entity;
 
-import org.service.PersonService;
-
 public abstract class Person {
     private long id;
     private String name;
@@ -12,9 +10,6 @@ public abstract class Person {
     }
 
     public Person(String username, String password) {
-        PersonService personService = new PersonService();
-        this.id = personService.setId();
-        this.name = personService.setName();
         this.username = username;
         this.password = password;
     }
