@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class DrugList {
     private Drug[] drugs;
     private final boolean finalSize;
-    private int index;
+    private int index = 0;
 
     public DrugList(int length, boolean finalSize) {
         this.finalSize = finalSize;
@@ -13,7 +13,7 @@ public class DrugList {
     }
 
     public void add(Drug drug) {
-        if (index == drugs.length - 1) {
+        if (isFull()) {
             if (finalSize)
                 return;
             Arrays.copyOf(drugs, drugs.length + 100);
@@ -72,6 +72,14 @@ public class DrugList {
         return string;
     }
     public boolean isFull() {
-        return index==drugs.length-1;
+        return index==drugs.length;
+    }
+
+    public String toStringSummary() {//show drug names only
+        String string = "";
+        for(int i = 0; i<index; i++) {
+            string += (i+1) + "- " + drugs[i].toStringSummary()+"\n";
+        }
+        return string;
     }
 }

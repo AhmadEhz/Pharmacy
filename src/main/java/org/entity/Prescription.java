@@ -14,10 +14,21 @@ public class Prescription {
         drugs = new DrugList(10, true);//max drugList by per prescription is 10.
     }
 
-    public Prescription(long patientId) {
+    public Prescription(long patientId, PrescriptionStatus status) {
         this.patientId = patientId;
         drugs = new DrugList(10, true);//max drugList by per prescription is 10.
-        status = PrescriptionStatus.PENDING;
+        this.status = status;
+    }
+
+    public Prescription(long patientId) {
+        this.patientId = patientId;
+        drugs = new DrugList(10, true);
+    }
+
+    public Prescription(long id, long patientId) {
+        this.id = id;
+        this.patientId = patientId;
+        drugs = new DrugList(10, true);
     }
 
     public long getId() {
@@ -67,15 +78,19 @@ public class Prescription {
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
+
     public int numberOfItems() {
         return drugs.length();
     }
 
     @Override
-    public String toString() {
-        return "Items:\n" + drugs +
-                "Status: " + status + "\n"
-                +"-----------------------------\n";
+    public String toString() {//if status is confirmed, shows all drugs with details. if not confirmed, shows name of drugs only.
+        String drugs = null;
+        if (this.drugs != null)//If this.drugs is null it means this prescription has not any items.
+            drugs = status == PrescriptionStatus.CONFIRMED ? this.drugs + "Total price: " + totalPrice + "\n" : this.drugs.toStringSummary();
+        String drugList = drugs != null ? "Items:\n" + drugs : "No item!\n";
+        return drugList + "Status: " + status + "\n" +
+                "-----------------------------\n";
     }
 
     @Override

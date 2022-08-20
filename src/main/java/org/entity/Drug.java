@@ -12,8 +12,12 @@ public class Drug {
     public Drug() {
     }
 
-    public Drug(String name) {
-        this.name = name;
+    public Drug(long id) {
+        this.id = id;
+    }
+    public Drug (long id, long prescriptionId) {
+        this.id = id;
+        this.prescriptionId = prescriptionId;
     }
 
     public Drug(int id, String name, int price, boolean doesExist, int prescriptionId) {
@@ -65,10 +69,9 @@ public class Drug {
     }
     @Override
     public String toString() {
-        return "Name: " + name + " | " +
+        return name + " | " +
                 "Price: " + price +
                 " -> " + doesExistToString();
-
     }
     private String doesExistToString() {
         if(doesExist)
@@ -87,5 +90,9 @@ public class Drug {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public String toStringSummary() {
+        return name;
     }
 }

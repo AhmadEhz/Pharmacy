@@ -25,8 +25,13 @@ public class PrescriptionService {
 
     }
 
-    public void remove(long id) throws SQLException {
-        prescriptionRepository.delete(id);
+    public void remove(Prescription prescription) {
+        try {
+            drugService.remove(prescription.getDrugs());
+            prescriptionRepository.delete(prescription);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public PrescriptionList loadAll() {
@@ -37,13 +42,17 @@ public class PrescriptionService {
         }
     }
 
-    public PrescriptionList loadAll(long patientId) throws SQLException {//Load only confirmed prescriptions.
-        return prescriptionRepository.readAll(patientId);
+    public PrescriptionList loadAll(long patientId,PrescriptionStatus status) {//Load only confirmed prescriptions.
+        try {
+            return prescriptionRepository.readAll(patientId,status);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public Prescription load(Prescription prescription) {
+    public Prescription load(Prescription prescription, boolean checkPatientId) {
         try {
-            return prescriptionRepository.read(prescription);
+            return prescriptionRepository.read(prescription, checkPatientId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,9 +67,9 @@ public class PrescriptionService {
         }
     }
 
-    public boolean isExist(Prescription prescription) {
+    public boolean isExist(Prescription prescription, boolean checkPatientId) {
         try {
-            return prescriptionRepository.read(prescription) != null;
+            return prescriptionRepository.read(prescription, checkPatientId) != null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

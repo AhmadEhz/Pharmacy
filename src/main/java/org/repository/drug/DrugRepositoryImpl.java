@@ -24,13 +24,13 @@ public class DrugRepositoryImpl implements DrugRepository {
     }
 
     @Override
-    public void remove(int id) throws SQLException {
+    public void delete(Drug drug) throws SQLException {
         String query = """
                 delete from drug
                 where id = ?;
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
-        ps.setLong(1, id);
+        ps.setLong(1, drug.getId());
         ps.execute();
         ps.close();
     }
@@ -80,9 +80,11 @@ public class DrugRepositoryImpl implements DrugRepository {
         String query = """
                 select * from drug
                 where id = ?
+                and prescription_id = ?
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
         ps.setLong(1,drug.getId());
+        ps.setLong(2,drug.getPrescriptionId());
         ResultSet rs = ps.executeQuery();
         if(rs.next()) {
             drug.setName("name");

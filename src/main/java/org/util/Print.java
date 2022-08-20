@@ -1,6 +1,6 @@
 package org.util;
 
-import org.entity.PrescriptionList;
+import org.entity.Prescription;
 
 public class Print {
     public static void welcome() {
@@ -24,14 +24,11 @@ public class Print {
         System.out.println("""
                 1- Add prescription
                 2- See confirmed prescriptions
-                3- Edit prescription
-                4- Delete prescription
+                3- Edit pending prescription
+                4- Delete pending prescription
+                5- See rejected prescriptions
                 0- Exit""");
         enterNumber();
-    }
-
-    public static void patientPrescription(PrescriptionList prescriptionList) {
-        System.out.println(prescriptionList);
     }
 
     public static void mainMenu() {
@@ -58,23 +55,8 @@ public class Print {
                 """);
     }
 
-    public static void created() {
-        System.out.println("Created!");
+    public static void prescription(Prescription prescription) {
+        System.out.println(prescription);
     }
 
-    public static void addDrug() {
-        System.out.println("Add your drug name (0 to save and exit) :");
-    }
-
-    public static void added() {
-        System.out.println("Added!");
-    }
-
-    public static void enterName() {
-        System.out.println("Enter your name");
-    }
-
-    public static void welcomeUser(String name) {
-        System.out.println("Welcome "+ name+"!");
-    }
 }

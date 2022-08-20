@@ -46,13 +46,13 @@ public class PrescriptionRepository {
         ps.close();
     }
 
-    public void delete(long id) throws SQLException {
+    public void delete(Prescription prescription) throws SQLException {
         String query = """
                 delete from prescription
                 where id = ?
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
-        ps.setLong(1, id);
+        ps.setLong(1, prescription.getId());
         ps.execute();
         ps.close();
     }
@@ -67,26 +67,29 @@ public class PrescriptionRepository {
                 """;
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
         ResultSet rs = ps.executeQuery();
-        ps.close();
         PrescriptionList prescriptionList = new PrescriptionList();
         while (rs.next()) {
             Prescription prescription = new Prescription();
             prescription.setId(rs.getLong("id"));
             prescription.setStatus(PrescriptionStatus.valueOf(rs.getString("status")));
+            prescription.setDrugs(drugRepository.read(prescription.getId()));
             prescriptionList.add(prescription);
         }
+        ps.close();
+        rs.close();
         return prescriptionList;
     }
 
-    public PrescriptionList readAll(long patient_id) throws SQLException {
+    public PrescriptionList readAll(long patient_id,PrescriptionStatus status) throws SQLException {
         String query = """
                 select * from prescription
                 where patient_id = ?
-                and status = 'CONFIRMED';
+                and status = ? :: prescription_status;
                 """;
 
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
         ps.setLong(1, patient_id);
+        ps.setString(2,status.name());
         ResultSet rs = ps.executeQuery();
         PrescriptionList prescriptionList = new PrescriptionList();
         while (rs.next()) {
@@ -100,13 +103,25 @@ public class PrescriptionRepository {
         return prescriptionList;
     }
 
-    public Prescription read(Prescription prescription) throws SQLException {
+    public Prescription read(Prescription prescription, boolean checkPatientId) throws SQLException {
+        boolean checkStatus = prescription.getStatus() != null; // if prescription has a status, its must check in database.
         String query = """
                 select * from prescription
-                where id = ?;
+                where id = ?
                 """;
+        if (checkPatientId)
+            query += " and patient_id = ? ";
+        if (checkStatus)
+            query += " and status = ? :: prescription_status";
         PreparedStatement ps = DbConfig.getConfig().prepareStatement(query);
         ps.setLong(1, prescription.getId());
+        if (checkPatientId)
+            ps.setLong(2, prescription.getPatientId());
+        if (checkStatus) {
+            int parameterIndex = checkPatientId ? 3 : 2; //If checkPatient id is true, getStatus will be 3rd of parameterIndex of ps.
+            ps.setString(parameterIndex, prescription.getStatus().name());
+        }
+
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             prescription.setDrugs(drugRepository.read(prescription.getId()));

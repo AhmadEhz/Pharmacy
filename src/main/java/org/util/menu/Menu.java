@@ -1,6 +1,5 @@
 package org.util.menu;
 
-import org.entity.Admin;
 import org.entity.Patient;
 import org.service.AdminService;
 import org.service.PatientService;
@@ -34,7 +33,7 @@ public class Menu {
     public static String enterUsername(boolean checkUserName) {
         while (true) {
             Print.enterUsername();
-            String input = Input.scanner();
+            String input = Input.scanner().toLowerCase();
             if(input.equals("0"))
                 return null;
             Patient patient = new Patient();

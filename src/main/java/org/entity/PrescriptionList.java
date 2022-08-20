@@ -63,9 +63,9 @@ public class PrescriptionList {
     }
     @Override
     public String toString() {
+        if(isEmpty())
+            return "There is no prescription!";
         String string = "";
-        if (isEmpty())
-            return null;
         for(int i=0; i<index; i++)
         {
             string += "Prescription " + (i+1) +":\n" + prescriptions[i];
